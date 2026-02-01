@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Best Brother?</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(-45deg,#ff9a9e,#fad0c4,#fbc2eb,#a6c1ee);
+    background-size:400% 400%;
+    animation:gradientBG 10s ease infinite;
+    overflow:hidden;
+}
+
+@keyframes gradientBG{
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+}
+
+.page{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+}
+
+/* MAIN PAGE */
+
+h1{
+    font-size:32px;
+    margin-bottom:40px;
+}
+
+.btnRow{
+    display:flex;
+    gap:20px;
+}
+
+.btn{
+    padding:14px 26px;
+    font-size:18px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+#yesBtn{background:#4CAF50;color:white;}
+#noBtn{background:#ff4d4d;color:white;position:relative;}
+
+/* YES PAGE */
+
+#yesPage{
+    display:none;
+    color:white;
+}
+
+.bigRow{
+    display:flex;
+    width:100%;
+    height:70vh;
+    justify-content:center;
+    align-items:center;
+}
+
+.sideImg{
+    width:40%;
+    height:100%;
+    object-fit:cover;
+    border-radius:20px;
+    border:5px solid white;
+}
+
+/* BEAUTIFUL CENTER MESSAGE */
+
+.centerText{
+    width:20%;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    padding:25px;
+    border-radius:20px;
+
+    background:linear-gradient(45deg,#ff6ec4,#7873f5);
+    color:white;
+
+    box-shadow:0 0 25px rgba(255,255,255,0.6);
+    animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{box-shadow:0 0 15px rgba(255,255,255,0.5);}
+to{box-shadow:0 0 35px rgba(255,255,255,1);}
+}
+
+/* CONFETTI */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="music.mp3"></audio>
+<canvas id="confetti"></canvas>
+
+<!-- MAIN PAGE -->
+<div id="mainPage" class="page">
+<h1>Am I your best brother? 🤨</h1>
+
+<div class="btnRow">
+<button id="yesBtn" class="btn">Yes 💚</button>
+<button id="noBtn" class="btn">No ❌</button>
+</div>
+</div>
+
+<!-- YES PAGE -->
+<div id="yesPage" class="page">
+<h1>Thanks a lot ❤️</h1>
+
+<div class="bigRow">
+
+<img src="me.jpeg" class="sideImg">
+
+<div class="centerText">
+Lucky to have a sister like you 💖<br><br>
+My forever best friend 🤗<br><br>
+Thank you for being YOU 🌸
+</div>
+
+<img src="sister.jpeg" class="sideImg">
+
+</div>
+</div>
+
+<script>
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+const mainPage=document.getElementById("mainPage");
+const yesPage=document.getElementById("yesPage");
+const music=document.getElementById("music");
+
+// YES CLICK
+yesBtn.onclick=()=>{
+    mainPage.style.display="none";
+    yesPage.style.display="flex";
+    music.play();
+    startConfetti();
+};
+
+// RUNNING NO BUTTON
+noBtn.onmouseover=()=>{
+    const x=Math.random()*200-100;
+    const y=Math.random()*200-100;
+    noBtn.style.transform=`translate(${x}px,${y}px)`;
+};
+
+// CONFETTI
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+function startConfetti(){
+    for(let i=0;i<150;i++){
+        pieces.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height-300,
+            r:Math.random()*6+4,
+            d:Math.random()*5+2
+        });
+    }
+    update();
+}
+
+function update(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+    pieces.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+        p.y+=p.d;
+        if(p.y>canvas.height)p.y=-10;
+    });
+    requestAnimationFrame(update);
+}
+</script>
+
+</body>
+</html>
